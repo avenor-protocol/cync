@@ -17,3 +17,5 @@ export const chain = defineChain({
 
 // if not set, tips go directly to the recipient
 export const routerAddress = (process.env.NEXT_PUBLIC_ROUTER_ADDRESS || undefined) as `0x${string}` | undefined;
+
+export const wcProjectId = process.env.NEXT_PUBLIC_WC_PROJECT_ID || undefined;
