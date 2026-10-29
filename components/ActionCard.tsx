@@ -39,12 +39,16 @@ export function ActionCard({ meta, query }: { meta: ActionMeta; query?: string }
     setBusy(true);
     try {
       let account = address;
+      let currentChainId = chainId;
       if (!isConnected) {
-        const injected = connectors[0];
-        if (!injected) throw new Error('No browser wallet found. Install MetaMask or Rabby.');
-        account = (await connectAsync({ connector: injected, chainId: chain.id })).accounts[0];
+        const injected = connectors.find(c => c.id === 'injected');
+        const connector = (await injected?.getProvider()) ? injected : connectors.find(c => c.id === 'walletConnect');
+        if (!connector) throw new Error('No browser wallet found. Install MetaMask or Rabby.');
+        const connection = await connectAsync({ connector, chainId: chain.id });
+        account = connection.accounts[0];
+        currentChainId = connection.chainId;
       }
-      if (chainId !== chain.id) await switchChainAsync({ chainId: chain.id });
+      if (currentChainId !== chain.id) await switchChainAsync({ chainId: chain.id });
 
       const res = await fetch(`/api/actions/tip?${query}&amount=${encodeURIComponent(value)}`, {
         method: 'POST',
