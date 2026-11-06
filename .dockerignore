@@ -1,0 +1,14 @@
+.git
+node_modules
+.next
+.env.local
+.env
+# Solidity side, not needed for the site
+contracts
+test
+script
+deps
+out
+cache
+broadcast
+foundry.toml

@@ -1,0 +1,27 @@
+# fixed name, so the certificate volume survives push.sh replacing the folder
+name: cync
+
+services:
+  app:
+    build: .
+    restart: unless-stopped
+    # not published: only Caddy reaches it
+
+  caddy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    depends_on: [app]
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    env_file: .env.production
+    volumes:
+      - ./deploy/Caddyfile:/etc/caddy/Caddyfile:ro
+      # keeps the HTTPS certificates across restarts and redeploys
+      - caddy_data:/data
+      - caddy_config:/config
+
+volumes:
+  caddy_data:
+  caddy_config:

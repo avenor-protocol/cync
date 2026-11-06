@@ -1,0 +1,10 @@
+node_modules
+.next
+.env.local
+.env.production
+next-env.d.ts
+*.tsbuildinfo
+out
+cache
+deps
+broadcast

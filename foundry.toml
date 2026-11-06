@@ -1,0 +1,18 @@
+[profile.default]
+src = "contracts"
+test = "test"
+script = "script"
+out = "out"
+# lib/ holds the app's TypeScript, so Solidity dependencies live in deps/
+libs = ["deps"]
+remappings = ["forge-std/=deps/forge-std/src/"]
+solc_version = "0.8.24"
+
+[fuzz]
+runs = 512
+
+[rpc_endpoints]
+sonic_testnet = "https://rpc.testnet.soniclabs.com"
+
+[etherscan]
+sonic_testnet = { key = "${ETHERSCAN_API_KEY}", chain = 14601, url = "https://api.etherscan.io/v2/api?chainid=14601" }
