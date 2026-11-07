@@ -77,7 +77,7 @@ This router predates two-step ownership; redeploy to get it (the app works with 
 
 Ownership moves in two steps: the owner calls `transferOwnership(newOwner)`, then the new owner calls `acceptOwnership()`. Until then nothing changes, so a wrong address can be replaced, and `transferOwnership(address(0))` cancels.
 
-Demo: _not published yet_
+Demo: https://cync.avenor-protocol.com
 
 `execute(kind, to, actionId)` takes native S; `kind` is `0` Transfer, `1` Tip, `2` Donate, and any other value reverts. Every action emits `ActionExecuted(actionId, from, to, kind, token, amount, fee)` with `token = address(0)` for S.
 
