@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { Inter, Sora } from 'next/font/google';
 import Link from 'next/link';
+import { isMainnet } from '@/lib/chain';
 import { contactEmail, socialLinks } from '@/lib/site';
 import { testTokens } from '@/lib/tokens';
 import { Providers } from './providers';
@@ -11,7 +12,7 @@ const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
 const sora = Sora({ subsets: ['latin'], variable: '--font-sora' });
 
 const title = 'Cync | Onchain actions, one link away';
-const description = 'Turn an onchain action into a link anyone can open, verify, and complete. Demo on Sonic testnet.';
+const description = `Turn an onchain action into a link anyone can open, verify, and complete. ${isMainnet ? 'Live on Sonic.' : 'Demo on Sonic testnet.'}`;
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL;
 
 export const metadata: Metadata = {
@@ -37,12 +38,17 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             </Link>
             <div className="nav-right">
               {testTokens && <Link href="/faucet" className="nav-link">Get test tokens</Link>}
-              <span className="net"><span className="net-long">Sonic </span>Testnet<span className="net-long"> · Demo</span></span>
+              {isMainnet ? (
+                <span className="net">Sonic<span className="net-long"> · Beta</span></span>
+              ) : (
+                <span className="net"><span className="net-long">Sonic </span>Testnet<span className="net-long"> · Demo</span></span>
+              )}
             </div>
           </header>
+          {isMainnet && <p className="beta-note">Beta: Cync's contracts have not had an external audit yet. Only send what you can afford to lose.</p>}
           <main className="main">{children}</main>
           <footer className="footer">
-            <span>Avenor · Demo on Sonic testnet. Test tokens have no value.</span>
+            <span>{isMainnet ? 'Avenor · Beta on Sonic.' : 'Avenor · Demo on Sonic testnet. Test tokens have no value.'}</span>
             <div className="footer-links">
               <Link href="/terms">Terms</Link>
               <Link href="/privacy">Privacy</Link>

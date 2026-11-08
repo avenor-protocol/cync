@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { isMainnet } from '@/lib/chain';
 import { contactEmail } from '@/lib/site';
 
 export const metadata: Metadata = { title: 'Terms · Cync' };
@@ -9,11 +10,24 @@ export default function Terms() {
       <h1>Terms of Use</h1>
       <p className="hint">Last updated November 8, 2026</p>
 
-      <h2>A demo on testnet</h2>
-      <p>
-        Cync is a demo run by Avenor on Sonic testnet. Test tokens have no value and cannot be exchanged for money. The
-        service can change, break, or stop at any time, and test data can be lost.
-      </p>
+      {isMainnet ? (
+        <>
+          <h2>A beta on Sonic</h2>
+          <p>
+            Cync is a beta service run by Avenor on Sonic mainnet. Payments use real assets and cannot be reversed. Cync's
+            contracts have not had an external audit and may contain bugs. The service can change, break, or stop at any
+            time. Only send what you can afford to lose.
+          </p>
+        </>
+      ) : (
+        <>
+          <h2>A demo on testnet</h2>
+          <p>
+            Cync is a demo run by Avenor on Sonic testnet. Test tokens have no value and cannot be exchanged for money. The
+            service can change, break, or stop at any time, and test data can be lost.
+          </p>
+        </>
+      )}
 
       <h2>Your wallet and your transactions</h2>
       <p>

@@ -7,7 +7,7 @@ cd "$(dirname "$0")/.."
 fail() { echo "error: $*" >&2; exit 1; }
 env=.env.production
 [ -f "$env" ] || fail "missing $env (copy .env.example and fill it in)"
-get() { sed -n "s/^$1=//p" "$env" | tail -n 1 | tr -d "\r\"'"; }
+get() { sed -n "s/^$1=//p" "${2:-$env}" | tail -n 1 | tr -d "\r\"'"; }
 
 domain=$(get DOMAIN)
 site=$(get NEXT_PUBLIC_SITE_URL)
@@ -28,9 +28,25 @@ if [ "$mem_kb" -lt 2000000 ] && [ -z "$(swapon --noheadings 2>/dev/null)" ] && [
   grep -q '^/swapfile' /etc/fstab || echo '/swapfile none swap sw 0 0' >> /etc/fstab
 fi
 
-docker compose up -d --build --remove-orphans
+# .env.mainnet is optional: when present, the mainnet app runs next to the testnet one
+mainnet=.env.mainnet
+if [ -f "$mainnet" ]; then
+  mainnet_domain=$(get MAINNET_DOMAIN "$mainnet")
+  [ -n "$mainnet_domain" ] || fail "MAINNET_DOMAIN is empty in $mainnet"
+  [ "$(get NEXT_PUBLIC_SITE_URL "$mainnet")" = "https://$mainnet_domain" ] || fail "NEXT_PUBLIC_SITE_URL must be https://$mainnet_domain in $mainnet"
+  [ "$(get NEXT_PUBLIC_CHAIN_ID "$mainnet")" = 146 ] || fail "NEXT_PUBLIC_CHAIN_ID must be 146 in $mainnet"
+  [ "$(printf %s "$(get NEXT_PUBLIC_ROUTER_ADDRESS "$mainnet")" | wc -c)" -eq 42 ] || fail "NEXT_PUBLIC_ROUTER_ADDRESS is missing in $mainnet: without it payments skip the fee router"
+  [ -z "$(get NEXT_PUBLIC_TEST_TOKENS "$mainnet")" ] || fail "NEXT_PUBLIC_TEST_TOKENS must be empty in $mainnet"
+  export COMPOSE_PROFILES=mainnet CADDYFILE=Caddyfile.mainnet
+fi
+
+# one build at a time: two parallel next builds do not fit in memory on a small server
+docker compose build app
+[ ! -f "$mainnet" ] || docker compose build app-mainnet
+docker compose up -d --remove-orphans
 docker image prune -f >/dev/null
 
 echo
 echo "done: https://$domain"
+[ ! -f "$mainnet" ] || echo "done: https://$mainnet_domain"
 echo "the DNS A record of $domain must point to this server, or Caddy cannot get the certificate (it keeps retrying)"

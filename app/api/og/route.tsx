@@ -1,5 +1,6 @@
 import { ImageResponse } from 'next/og';
 import type { NextRequest } from 'next/server';
+import { networkName } from '@/lib/chain';
 import { previewLabel, readAction, shortAddress } from '@/lib/preview';
 import { rateLimit } from '@/lib/rateLimit';
 
@@ -46,7 +47,7 @@ export async function GET(req: NextRequest) {
   const [src, sora, inter] = await Promise.all([
     logo(req),
     font('Sora', 700, `CYNC${title}${chips.join('')}`),
-    font('Inter', 400, `Sonic testnet${label.toUpperCase()}${sub}${footer}${tagline}`),
+    font('Inter', 400, `${networkName}${label.toUpperCase()}${sub}${footer}${tagline}`),
   ]);
   const fonts = [sora, inter].filter(f => f !== null);
   const heading = sora ? 'Sora' : undefined;
@@ -67,7 +68,7 @@ export async function GET(req: NextRequest) {
             <div style={{ fontSize: 30, fontWeight: 700, letterSpacing: 8, fontFamily: heading }}>CYNC</div>
           </div>
           <div style={{ display: 'flex', fontSize: 22, color: '#38c8ff', border: '1px solid rgba(140, 160, 255, 0.3)', borderRadius: 999, padding: '8px 20px' }}>
-            Sonic testnet
+            {networkName}
           </div>
         </div>
 

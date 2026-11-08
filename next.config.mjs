@@ -2,7 +2,7 @@
 const empty = './lib/stubs/empty.js';
 
 const isDev = process.env.NODE_ENV !== 'production';
-const rpcOrigin = new URL(process.env.NEXT_PUBLIC_RPC_URL || 'https://rpc.testnet.soniclabs.com').origin;
+const rpcOrigin = new URL(process.env.NEXT_PUBLIC_RPC_URL || (process.env.NEXT_PUBLIC_CHAIN_ID === '146' ? 'https://rpc.soniclabs.com' : 'https://rpc.testnet.soniclabs.com')).origin;
 const walletConnect = ['walletconnect.org', 'walletconnect.com', 'reown.com', 'web3modal.org', 'web3modal.com'];
 
 const csp = [

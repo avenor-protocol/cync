@@ -13,4 +13,5 @@ git diff --quiet HEAD -- || echo "note: uncommitted changes are not uploaded, on
 git archive --format=tar HEAD |
   ssh "$target" "rm -rf $dir.new && mkdir -p $dir.new && tar -x -C $dir.new && rm -rf $dir && mv $dir.new $dir"
 scp -q .env.production "$target:$dir/.env.production"
+[ ! -f .env.mainnet ] || scp -q .env.mainnet "$target:$dir/.env.mainnet"
 ssh "$target" "sh $dir/deploy/deploy.sh"

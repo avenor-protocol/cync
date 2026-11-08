@@ -13,6 +13,8 @@ runs = 512
 
 [rpc_endpoints]
 sonic_testnet = "https://rpc.testnet.soniclabs.com"
+sonic = "https://rpc.soniclabs.com"
 
 [etherscan]
 sonic_testnet = { key = "${ETHERSCAN_API_KEY}", chain = 14601, url = "https://api.etherscan.io/v2/api?chainid=14601" }
+sonic = { key = "${ETHERSCAN_API_KEY}", chain = 146, url = "https://api.etherscan.io/v2/api?chainid=146" }

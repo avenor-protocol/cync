@@ -49,6 +49,19 @@ sh deploy/push.sh root@SERVER_IP
 
 This uploads the last commit (not uncommitted changes) and `.env.production` to `/opt/cync`, then runs `deploy/deploy.sh` there to build and start. Run it again to ship an update, or point it at a new server to move: the site is back once DNS points there.
 
+### Mainnet next to testnet
+
+Testnet keeps running from `.env.production`. To add Sonic mainnet:
+
+1. Deploy the router from a wallet used only as owner, with a different fee wallet. `FEE_BPS` has no default.
+
+```bash
+FEE_RECIPIENT=0x... FEE_BPS=100 forge script script/DeployMainnet.s.sol --rpc-url sonic --broadcast --interactive
+```
+
+2. `cp .env.mainnet.example .env.mainnet` and set `NEXT_PUBLIC_ROUTER_ADDRESS` and `NEXT_PUBLIC_WC_PROJECT_ID`.
+3. Run `sh deploy/push.sh root@SERVER_IP`. With `.env.mainnet` present, it builds both apps and serves mainnet on `MAINNET_DOMAIN` through `deploy/Caddyfile.mainnet`, which replaces the old-address redirect.
+
 ## Contract
 
 `script/DeployTestnet.s.sol` deploys the whole demo on Sonic testnet: `CyncRouter`, test USSD (18 decimals) and test USDC (6 decimals), both allowlisted. It refuses to run on any chain except 14601. The broadcasting wallet becomes the router owner and needs about 0.01 testnet S. Install forge-std first (see Tests). `--interactive` prompts for the private key, so it never lands in a file or the shell history.

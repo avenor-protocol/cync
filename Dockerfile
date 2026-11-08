@@ -7,8 +7,10 @@ RUN npm ci
 FROM node:22-alpine AS build
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
-# includes .env.production: NEXT_PUBLIC_* values are baked into the build
+# NEXT_PUBLIC_* values are baked into the build, from .env.production or the file named by ENV_FILE
+ARG ENV_FILE=.env.production
 COPY . .
+RUN [ "$ENV_FILE" = .env.production ] || cp "$ENV_FILE" .env.production
 ENV NEXT_TELEMETRY_DISABLED=1
 RUN npm run build
 

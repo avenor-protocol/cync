@@ -5,16 +5,16 @@ import { formatUnits, parseUnits } from 'viem';
 import { useReadContract, useSignTypedData } from 'wagmi';
 import { ActionCard } from '@/components/ActionCard';
 import { ACTION_TYPES, actionCopy, isValidAmount, parseAction, toQuery, type ActionType } from '@/lib/action';
-import { chain, routerAddress } from '@/lib/chain';
+import { chain, networkName, routerAddress } from '@/lib/chain';
 import { routerAbi } from '@/lib/routerAbi';
 import { typedAction } from '@/lib/signature';
 import { defaultToken, tokens } from '@/lib/tokens';
 import { useWallet, walletError } from '@/lib/useWallet';
 
 const hints: Record<ActionType, (symbol: string) => string> = {
-  transfer: s => `Request a fixed amount of ${s} on Sonic testnet. Whoever opens the link pays exactly that amount.`,
-  tip: s => `Anyone who opens the link can send you ${s} on Sonic testnet without copying your address.`,
-  donate: s => `Collect donations in ${s} on Sonic testnet. Donors pick a suggested amount or enter their own.`,
+  transfer: s => `Request a fixed amount of ${s} on ${networkName}. Whoever opens the link pays exactly that amount.`,
+  tip: s => `Anyone who opens the link can send you ${s} on ${networkName} without copying your address.`,
+  donate: s => `Collect donations in ${s} on ${networkName}. Donors pick a suggested amount or enter their own.`,
 };
 
 export default function CreatePage() {
