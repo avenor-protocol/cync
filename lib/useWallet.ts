@@ -1,6 +1,6 @@
 'use client';
 
-import { useConnect, useConnection, useConnectors, useSwitchChain } from 'wagmi';
+import { useConnect, useConnection, useConnectors, useDisconnect, useSwitchChain } from 'wagmi';
 import { chain } from '@/lib/chain';
 
 // Connects a browser wallet (WalletConnect as fallback), switches to Sonic, and returns the account.
@@ -9,6 +9,7 @@ export function useWallet() {
   const { mutateAsync: connectAsync } = useConnect();
   const connectors = useConnectors();
   const { mutateAsync: switchChainAsync } = useSwitchChain();
+  const { mutate: disconnect } = useDisconnect();
 
   async function connect(): Promise<`0x${string}`> {
     let account = address;
@@ -25,7 +26,7 @@ export function useWallet() {
     return account;
   }
 
-  return { address, isConnected, connect };
+  return { address, isConnected, connect, disconnect: () => disconnect() };
 }
 
 // wallets report a user cancel in different words

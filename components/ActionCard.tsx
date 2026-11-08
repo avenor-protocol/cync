@@ -33,7 +33,7 @@ export function ActionCard({ meta, query }: { meta: ActionMeta; query?: string }
   const [busy, setBusy] = useState('');
   const [hash, setHash] = useState<Hex>(); // the final payment tx, not the approval
 
-  const { address, isConnected, connect } = useWallet();
+  const { address, isConnected, connect, disconnect } = useWallet();
   const { mutateAsync: sendTransactionAsync } = useSendTransaction();
   const publicClient = usePublicClient({ chainId: chain.id });
   const receipt = useWaitForTransactionReceipt({ hash, chainId: chain.id });
@@ -177,7 +177,7 @@ export function ActionCard({ meta, query }: { meta: ActionMeta; query?: string }
         )}
       </dl>
 
-      <p className="unverified-note">Unverified: not checked by the Action Registry yet. Make sure you trust the recipient address above.</p>
+      <p className="unverified-note">Check the recipient address before you pay.</p>
 
       <button className="btn btn-block" onClick={submit} disabled={!query || !!busy}>
         {busy || (isConnected ? `${copy.verb} ${value || ''} ${symbol}` : `Connect wallet & ${copy.verb.toLowerCase()}`)}
@@ -207,7 +207,13 @@ export function ActionCard({ meta, query }: { meta: ActionMeta; query?: string }
 
       <div className="meta">
         <span>Cync · {chain.name}</span>
-        <span>{isConnected && address ? `Connected ${short(address)}` : 'You review & sign in your wallet'}</span>
+        {isConnected && address ? (
+          <span>
+            Connected {short(address)} · <button type="button" className="link-btn" onClick={disconnect} disabled={!!busy}>Disconnect</button>
+          </span>
+        ) : (
+          <span>You review & sign in your wallet</span>
+        )}
       </div>
     </div>
   );
