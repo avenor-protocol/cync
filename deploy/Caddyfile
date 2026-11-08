@@ -3,3 +3,8 @@
 	encode zstd gzip
 	reverse_proxy app:3000
 }
+
+# old demo address; remove when mainnet moves here
+cync.avenor-protocol.com {
+	redir https://testnet.cync.avenor-protocol.com{uri} permanent
+}
