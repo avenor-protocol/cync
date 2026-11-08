@@ -9,8 +9,8 @@ const csp = [
   "default-src 'self'",
   // Next's bootstrap scripts are inline; the dev server also needs eval
   `script-src 'self' 'unsafe-inline'${isDev ? " 'unsafe-eval'" : ''}`,
-  "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
-  'font-src \'self\' data: https://fonts.gstatic.com https://fonts.reown.com',
+  "style-src 'self' 'unsafe-inline'",
+  "font-src 'self' data: https://fonts.reown.com",
   // action links can point their icon at any https image
   "img-src 'self' data: blob: https:",
   `connect-src 'self' ${rpcOrigin} ${walletConnect.flatMap(d => [`https://*.${d}`, `wss://*.${d}`]).join(' ')}${isDev ? ' ws:' : ''}`,
@@ -35,7 +35,11 @@ const nextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
   async headers() {
-    return [{ source: '/:path*', headers: securityHeaders }];
+    return [
+      { source: '/:path*', headers: securityHeaders },
+      // these filenames carry no hash, so a week rather than forever
+      { source: '/:file(logo|og-logo).png', headers: [{ key: 'Cache-Control', value: 'public, max-age=604800' }] },
+    ];
   },
   // self-contained server in .next/standalone, used by the Dockerfile
   output: 'standalone',

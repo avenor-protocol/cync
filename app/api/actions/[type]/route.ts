@@ -3,6 +3,7 @@ import { createPublicClient, encodeFunctionData, erc20Abi, http, isAddress, pars
 import { actionCopy, actionId, actionKind, isActionType, isValidAmount, parseAction, toQuery, type Action } from '@/lib/action';
 import { chain, routerAddress } from '@/lib/chain';
 import { routerAbi } from '@/lib/routerAbi';
+import { rateLimit } from '@/lib/rateLimit';
 import { checkCreator } from '@/lib/signature';
 import type { Tx } from '@/lib/verify';
 
@@ -30,6 +31,16 @@ async function load(req: NextRequest, ctx: Ctx): Promise<Action | { error: strin
 
 const fail = (message: string, status = 400) => NextResponse.json({ message }, { status, headers });
 
+// every call here reads the chain, so one client cannot be allowed to run them without limit
+function limited(req: NextRequest) {
+  const wait = rateLimit(req, 'actions', 60);
+  if (!wait) return null;
+  return NextResponse.json(
+    { message: 'Too many requests. Wait a minute and try again.' },
+    { status: 429, headers: { ...headers, 'Retry-After': String(wait) } },
+  );
+}
+
 // a problem with this action or payer (shown as is), as opposed to an RPC failure
 class ActionError extends Error {}
 
@@ -38,6 +49,8 @@ export function OPTIONS() {
 }
 
 export async function GET(req: NextRequest, ctx: Ctx) {
+  const blocked = limited(req);
+  if (blocked) return blocked;
   const action = await load(req, ctx);
   if ('error' in action) return fail(action.error, action.status);
 
@@ -71,6 +84,8 @@ export async function GET(req: NextRequest, ctx: Ctx) {
 }
 
 export async function POST(req: NextRequest, ctx: Ctx) {
+  const blocked = limited(req);
+  if (blocked) return blocked;
   const action = await load(req, ctx);
   if ('error' in action) return fail(action.error, action.status);
 

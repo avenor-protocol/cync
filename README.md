@@ -5,6 +5,7 @@ Shareable onchain actions on Sonic. Demo version, testnet only.
 - `/create` - create a transfer, tip, or donate link
 - `/a` - action page (connect wallet, review, sign); shared links get a preview card on X, Telegram, and Discord from `/api/og`
 - `/faucet` - test USSD / USDC (testnet only)
+- `/terms`, `/privacy` - legal pages (contact address in `lib/site.ts`)
 - `/api/actions/{transfer|tip|donate}` - action api (`GET` metadata, `POST` unsigned tx)
 - `contracts/CyncRouter.sol` - router contract with platform fee
 

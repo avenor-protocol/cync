@@ -1,6 +1,7 @@
 import { ImageResponse } from 'next/og';
 import type { NextRequest } from 'next/server';
 import { previewLabel, readAction, shortAddress } from '@/lib/preview';
+import { rateLimit } from '@/lib/rateLimit';
 
 // 1200x630 card for link previews. With a valid action in the query it shows that action, otherwise the site card.
 const size = { width: 1200, height: 630 };
@@ -30,6 +31,8 @@ async function font(family: string, weight: number, text: string) {
 }
 
 export async function GET(req: NextRequest) {
+  const wait = rateLimit(req, 'og', 60);
+  if (wait) return new Response('Too many requests', { status: 429, headers: { 'Retry-After': String(wait) } });
   const action = readAction(req.nextUrl.searchParams);
   const symbol = action?.token.symbol ?? '';
   const title = action ? clip(action.title, 70) : 'Onchain actions, one link away.';

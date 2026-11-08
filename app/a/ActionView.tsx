@@ -14,11 +14,15 @@ import { checkCreator } from '@/lib/signature';
 function LinkError({ message }: { message: string }) {
   const tampered = /changed after|do not match/i.test(message);
   const network = !tampered && /reach the Sonic network|failed to fetch|networkerror|load failed/i.test(message);
+  const busy = /too many requests/i.test(message);
+  const retry = network || busy;
   const [title, hint] = tampered
     ? ['Do not pay this link', 'Ask the creator for the original link, and only pay links shared on their official channels.']
-    : network
-      ? ['Could not load this link', 'The Sonic network could not be reached. Check your connection and try again.']
-      : ["This link can't be opened",'It may be incomplete or mistyped. Ask the sender for the full link, or create your own.'];
+    : busy
+      ? ['Please wait a moment', 'Your link is fine. Too many requests came from your connection.']
+      : network
+        ? ['Could not load this link', 'The Sonic network could not be reached. Check your connection and try again.']
+        : ["This link can't be opened",'It may be incomplete or mistyped. Ask the sender for the full link, or create your own.'];
   return (
     <div className="center">
       <div className={tampered ? 'link-error danger' : 'link-error'}>
@@ -26,8 +30,8 @@ function LinkError({ message }: { message: string }) {
         <div className="status err">{message}</div>
         <p className="hint">{hint}</p>
         <div className="row">
-          {network && <button className="btn" onClick={() => location.reload()}>Try again</button>}
-          {!network && !tampered && <Link href="/create" className="btn">Create a link</Link>}
+          {retry && <button className="btn" onClick={() => location.reload()}>Try again</button>}
+          {!retry && !tampered && <Link href="/create" className="btn">Create a link</Link>}
           <Link href="/" className={tampered ? 'btn' : 'btn btn-ghost'}>Home</Link>
         </div>
       </div>

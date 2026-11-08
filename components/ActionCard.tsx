@@ -128,9 +128,7 @@ export function ActionCard({ meta, query }: { meta: ActionMeta; query?: string }
           <div className="card-by">
             to {meta.recipient ? short(meta.recipient) : '0x…'}
             {/* v1 has no Action Registry, so no link is verified yet */}
-            <span className="unverified" title="Not checked by the Action Registry yet. Make sure you trust the recipient address below.">
-              Unverified
-            </span>
+            <span className="unverified">Unverified</span>
           </div>
         </div>
       </div>
@@ -178,6 +176,8 @@ export function ActionCard({ meta, query }: { meta: ActionMeta; query?: string }
           </>
         )}
       </dl>
+
+      <p className="unverified-note">Unverified: not checked by the Action Registry yet. Make sure you trust the recipient address above.</p>
 
       <button className="btn btn-block" onClick={submit} disabled={!query || !!busy}>
         {busy || (isConnected ? `${copy.verb} ${value || ''} ${symbol}` : `Connect wallet & ${copy.verb.toLowerCase()}`)}

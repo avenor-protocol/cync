@@ -1,8 +1,14 @@
 import type { Metadata } from 'next';
+import { Inter, Sora } from 'next/font/google';
 import Link from 'next/link';
+import { contactEmail, socialLinks } from '@/lib/site';
 import { testTokens } from '@/lib/tokens';
 import { Providers } from './providers';
 import './globals.css';
+
+// downloaded at build time and served from this site, so visitors never contact Google
+const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
+const sora = Sora({ subsets: ['latin'], variable: '--font-sora' });
 
 const title = 'Cync | Onchain actions, one link away';
 const description = 'Turn an onchain action into a link anyone can open, verify, and complete. Demo on Sonic testnet.';
@@ -20,15 +26,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
-      <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700&family=Inter:wght@400;500;600&display=swap"
-          rel="stylesheet"
-        />
-      </head>
+    <html lang="en" className={`${inter.variable} ${sora.variable}`}>
       <body>
         <Providers>
           <header className="nav">
@@ -43,6 +41,15 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             </div>
           </header>
           <main className="main">{children}</main>
+          <footer className="footer">
+            <span>Avenor · Demo on Sonic testnet. Test tokens have no value.</span>
+            <div className="footer-links">
+              <Link href="/terms">Terms</Link>
+              <Link href="/privacy">Privacy</Link>
+              <a href={`mailto:${contactEmail}`}>Contact</a>
+              {socialLinks.map(s => <a key={s.label} href={s.href} target="_blank" rel="noreferrer">{s.label}</a>)}
+            </div>
+          </footer>
         </Providers>
       </body>
     </html>

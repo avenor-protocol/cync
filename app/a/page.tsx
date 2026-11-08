@@ -10,7 +10,9 @@ export async function generateMetadata({ searchParams }: Props): Promise<Metadat
   const params = new URLSearchParams();
   for (const [k, v] of Object.entries(await searchParams)) if (v !== undefined) params.set(k, Array.isArray(v) ? v[0] : v);
   const action = readAction(params);
-  if (!action) return {}; // invalid link: the site card from the layout
+  // payment links stay out of search results; robots.txt must still allow them or X cannot read the preview
+  const robots = { index: false };
+  if (!action) return { robots }; // invalid link: the site card from the layout
 
   const title = `${action.title} · ${previewLabel[action.type]} on Cync`;
   const description = previewDescription(action);
@@ -18,6 +20,7 @@ export async function generateMetadata({ searchParams }: Props): Promise<Metadat
   return {
     title,
     description,
+    robots,
     openGraph: { title, description, images: [image], type: 'website', siteName: 'Cync' },
     twitter: { card: 'summary_large_image', title, description, images: [image.url] },
   };
