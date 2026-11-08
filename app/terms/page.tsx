@@ -16,7 +16,7 @@ export default function Terms() {
           <p>
             Cync is a service run by Avenor on Sonic mainnet. Payments use real assets and cannot be reversed. Cync's
             contracts have not had an external audit and may contain bugs. The service can change, break, or stop at any
-            time. Only send what you can afford to lose.
+            time.
           </p>
         </>
       ) : (
