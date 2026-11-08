@@ -12,9 +12,9 @@ export default function Terms() {
 
       {isMainnet ? (
         <>
-          <h2>A beta on Sonic</h2>
+          <h2>Cync on Sonic</h2>
           <p>
-            Cync is a beta service run by Avenor on Sonic mainnet. Payments use real assets and cannot be reversed. Cync's
+            Cync is a service run by Avenor on Sonic mainnet. Payments use real assets and cannot be reversed. Cync's
             contracts have not had an external audit and may contain bugs. The service can change, break, or stop at any
             time. Only send what you can afford to lose.
           </p>

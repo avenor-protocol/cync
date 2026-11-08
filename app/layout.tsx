@@ -39,16 +39,15 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <div className="nav-right">
               {testTokens && <Link href="/faucet" className="nav-link">Get test tokens</Link>}
               {isMainnet ? (
-                <span className="net">Sonic<span className="net-long"> · Beta</span></span>
+                <span className="net">Sonic</span>
               ) : (
                 <span className="net"><span className="net-long">Sonic </span>Testnet<span className="net-long"> · Demo</span></span>
               )}
             </div>
           </header>
-          {isMainnet && <p className="beta-note">Beta: Cync's contracts have not had an external audit yet. Only send what you can afford to lose.</p>}
           <main className="main">{children}</main>
           <footer className="footer">
-            <span>{isMainnet ? 'Avenor · Beta on Sonic.' : 'Avenor · Demo on Sonic testnet. Test tokens have no value.'}</span>
+            <span>{isMainnet ? 'Avenor · Live on Sonic.' : 'Avenor · Demo on Sonic testnet. Test tokens have no value.'}</span>
             <div className="footer-links">
               <Link href="/terms">Terms</Link>
               <Link href="/privacy">Privacy</Link>
