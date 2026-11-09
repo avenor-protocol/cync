@@ -2,7 +2,7 @@ export const contactEmail = 'avenor.protocol@gmail.com';
 
 export const socialLinks = [
   { label: 'X', href: 'https://x.com/Avenor_Protocol' },
-  { label: 'Telegram', href: 'https://t.me/avenor_protocol' },
+  { label: 'Telegram', href: 'https://t.me/+mHMTddtQMC02YmVk' },
   { label: 'GitHub', href: 'https://github.com/avenor-protocol' },
 ];
 
