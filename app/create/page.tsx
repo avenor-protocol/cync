@@ -5,7 +5,7 @@ import { formatUnits, parseUnits } from 'viem';
 import { useReadContract, useSignTypedData } from 'wagmi';
 import { ActionCard } from '@/components/ActionCard';
 import { ACTION_TYPES, actionCopy, isValidAmount, parseAction, toQuery, type ActionType } from '@/lib/action';
-import { chain, networkName, routerAddress } from '@/lib/chain';
+import { chain, isMainnet, networkName, routerAddress } from '@/lib/chain';
 import { routerAbi } from '@/lib/routerAbi';
 import { typedAction } from '@/lib/signature';
 import { defaultToken, tokens } from '@/lib/tokens';
@@ -133,6 +133,7 @@ export default function CreatePage() {
             {tokens.map(t => (
               <button key={t.symbol} type="button" role="radio" aria-checked={t === token} className={t === token ? 'on' : ''}
                 onClick={() => { setToken(t); setLink(''); }}>
+                {isMainnet && <img src={`/tokens/${t.symbol.toLowerCase()}.png`} alt="" width={20} height={20} className="token-logo" />}
                 {t.symbol}
               </button>
             ))}

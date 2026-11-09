@@ -89,6 +89,7 @@ img { display: block; max-width: 100%; }
   border: 1px solid var(--line-2); background: rgba(255, 255, 255, .03);
 }
 .types button.on { border-color: var(--cyan); color: #fff; background: rgba(56, 200, 255, .12); }
+.token-logo { display: inline-block; width: 20px; height: 20px; margin-right: 8px; border-radius: 50%; vertical-align: -5px; }
 .field { display: block; margin-bottom: 18px; }
 .field span { display: block; font-size: 13px; color: #b6bedf; margin-bottom: 6px; }
 .field input, .field textarea {

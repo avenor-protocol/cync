@@ -39,7 +39,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <div className="nav-right">
               {testTokens && <Link href="/faucet" className="nav-link">Get test tokens</Link>}
               {isMainnet ? (
-                <span className="net">Sonic</span>
+                <span className="net"><span className="net-long">Live on </span>Sonic Mainnet</span>
               ) : (
                 <span className="net"><span className="net-long">Sonic </span>Testnet<span className="net-long"> · Demo</span></span>
               )}
